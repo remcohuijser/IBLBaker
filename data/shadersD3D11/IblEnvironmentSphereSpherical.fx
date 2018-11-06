@@ -63,7 +63,7 @@ SamplerState anisotropicSampler
     BorderColor = float4(10000,10000,10000,10000);
 };
 
-float4 texSpherical(float3 dir, float lod)
+float4 texSphericalOld(float3 dir, float lod)
 {
     float n = length(dir.xz);
 
@@ -72,6 +72,18 @@ float4 texSpherical(float3 dir, float lod)
     pos.x = (dir.z > 0.0) ? pos.x*0.5 : 1.0-(pos.x*0.5);
     pos.x = 1.0-pos.x;
     return environmentMap.SampleLevel(anisotropicSampler, pos, lod);
+}
+
+float4 texSpherical(float3 dir, float lod)
+{
+	float3 normalizedDir = normalize(dir);
+
+	float theta = acos(normalizedDir.y) * 0.5;
+
+	float phi = atan2(normalizedDir.x, normalizedDir.z) + 3.1415926;
+	float2 uv = float2(phi, theta) * float2(0.1591549, 0.6366198);
+	
+	return environmentMap.SampleLevel(anisotropicSampler, uv, lod);
 }
 
 struct VertexShaderIn
@@ -129,10 +141,7 @@ PixelShaderOut ps (PixelShaderInput vertexShaderOut)
     float4    diffuseColor = float4(pow(textureGammaColor.rgb, textureGamma), textureGammaColor.a);
     float alpha =  diffuseColor.a ;
 
-    output.output0.r = diffuseColor.r;
-    output.output0.g = diffuseColor.g;
-    output.output0.b = diffuseColor.b;
-    output.output0.a = 1;
+	output.output0 = float4(diffuseColor.rgb, 1);
 
     return output;
 }
