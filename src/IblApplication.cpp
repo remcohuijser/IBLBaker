@@ -293,11 +293,13 @@ IBLApplication::initialize()
         // Add a probe.
         _probe = _scene->addProbe();
         // Default samples
-        _probe->sampleCountProperty()->set(128);
-        _probe->samplesPerFrameProperty()->set(128);
+        _probe->sampleCountProperty()->set(512);
+		_probe->samplesPerFrameProperty()->set(128);
+		_probe->environmentScaleProperty()->set(1.0);
+		_probe->mipDropProperty()->set(3);
 
         _probe->hdrPixelFormatProperty()->set(_hdrFormatProperty->get()),
-        _probe->sourceResolutionProperty()->set(_probeResolutionProperty->get());
+        _probe->sourceResolutionProperty()->set(1024);
 
         Vector4f maxPixelValue = _iblSphereEntity->mesh(0)->material()->albedoMap()->maxValue();
         _probe->maxPixelRProperty()->set(maxPixelValue.x);
@@ -705,8 +707,8 @@ IBLApplication::saveImages(const std::string& filePathName, bool gameOnly)
 
         if (trimmed)
         {
-            std::string specularHDRPath = pathName + fileNameBase + "SpecularHDR.dds";
-            std::string diffuseHDRPath = pathName + fileNameBase + "DiffuseHDR.dds";
+            std::string specularHDRPath = pathName + fileNameBase + "Specular.dds";
+            std::string diffuseHDRPath = pathName + fileNameBase + "Diffuse.dds";
             std::string envHDRPath = pathName + fileNameBase + "EnvHDR.dds";
 
             std::string specularMDRPath = pathName + fileNameBase + "SpecularMDR.dds";
@@ -715,16 +717,16 @@ IBLApplication::saveImages(const std::string& filePathName, bool gameOnly)
 
             std::string brdfLUTPath = pathName + fileNameBase + "Brdf.dds";
 
-            LOG("Saving RGBM MDR diffuse to " << diffuseMDRPath);
-            probe->diffuseCubeMapMDR()->save(diffuseMDRPath, true /* fix seams */, false /* split to RGB MMM */);
-            LOG("Saving RGBM MDR specular to " << specularMDRPath);
-            probe->specularCubeMapMDR()->save(specularMDRPath, true /* fix seams */, false /* split to RGB MMM */);
-            LOG("Saving RGBM MDR environment to " << envMDRPath);
-            probe->environmentCubeMapMDR()->save(envMDRPath, true /* fix seams */, false /* split to RGB MMM */);
+            //LOG("Saving RGBM MDR diffuse to " << diffuseMDRPath);
+            //probe->diffuseCubeMapMDR()->save(diffuseMDRPath, true /* fix seams */, false /* split to RGB MMM */);
+            //LOG("Saving RGBM MDR specular to " << specularMDRPath);
+            //probe->specularCubeMapMDR()->save(specularMDRPath, true /* fix seams */, false /* split to RGB MMM */);
+            //LOG("Saving RGBM MDR environment to " << envMDRPath);
+            //probe->environmentCubeMapMDR()->save(envMDRPath, true /* fix seams */, false /* split to RGB MMM */);
 
 
             // Save the brdf too.
-            _scene->activeBrdf()->brdfLut()->save(brdfLUTPath, false, false);
+            //_scene->activeBrdf()->brdfLut()->save(brdfLUTPath, false, false);
 
 
 // This operation on a 2k floating point cubemap with a full mip chain blows
