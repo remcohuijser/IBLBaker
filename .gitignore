@@ -432,3 +432,13 @@ build/x64/Debug/IBLBaker.tlog/link.7148-cvtres.read.1.tlog
 build/x64/Debug/IBLBaker.tlog/link.7148-cvtres.write.1.tlog
 build/x64/Debug/IBLBaker.tlog/link.7148-rc.read.1.tlog
 build/x64/Debug/IBLBaker.tlog/link.7148-rc.write.1.tlog
+
+Build64/
+
+imgui\.ini
+
+lib/
+
+bin64/
+
+data/textures/Procedural/Output\.dds

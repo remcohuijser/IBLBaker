@@ -78,10 +78,12 @@ float4 texSpherical(float3 dir, float lod)
 {
 	float3 normalizedDir = normalize(dir);
 
-	float theta = acos(normalizedDir.y) * 0.5;
-
-	float phi = atan2(normalizedDir.x, normalizedDir.z) + 3.1415926;
-	float2 uv = float2(phi, theta) * float2(0.1591549, 0.6366198);
+	float lon = atan2(-normalizedDir.z, normalizedDir.x);
+	float lat = acos(normalizedDir.y);
+	
+	float2 radians = float2(1.0 / (3.141592 * 2.0), 1.0 / 3.141592);
+	
+	float2 uv = float2(lon, lat) * radians;
 	
 	return environmentMap.SampleLevel(anisotropicSampler, uv, lod);
 }

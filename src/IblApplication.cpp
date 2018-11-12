@@ -293,13 +293,14 @@ IBLApplication::initialize()
         // Add a probe.
         _probe = _scene->addProbe();
         // Default samples
-        _probe->sampleCountProperty()->set(512);
-		_probe->samplesPerFrameProperty()->set(128);
+		_probe->sampleCountProperty()->set(1408);
+		_probe->samplesPerFrameProperty()->set(256);
 		_probe->environmentScaleProperty()->set(1.0);
 		_probe->mipDropProperty()->set(3);
 
-        _probe->hdrPixelFormatProperty()->set(_hdrFormatProperty->get()),
-        _probe->sourceResolutionProperty()->set(1024);
+		_probe->hdrPixelFormatProperty()->set(PF_FLOAT16_RGBA);
+		_probe->sourceResolutionProperty()->set(1024);
+		_probe->specularResolutionProperty()->set(1024);
 
         Vector4f maxPixelValue = _iblSphereEntity->mesh(0)->material()->albedoMap()->maxValue();
         _probe->maxPixelRProperty()->set(maxPixelValue.x);
@@ -707,8 +708,8 @@ IBLApplication::saveImages(const std::string& filePathName, bool gameOnly)
 
         if (trimmed)
         {
-            std::string specularHDRPath = pathName + fileNameBase + "Specular.dds";
-            std::string diffuseHDRPath = pathName + fileNameBase + "Diffuse.dds";
+            std::string specularHDRPath = pathName + fileNameBase + "Radiance.dds";
+            std::string diffuseHDRPath = pathName + fileNameBase + "Irradiance.dds";
             std::string envHDRPath = pathName + fileNameBase + "EnvHDR.dds";
 
             std::string specularMDRPath = pathName + fileNameBase + "SpecularMDR.dds";
@@ -732,10 +733,10 @@ IBLApplication::saveImages(const std::string& filePathName, bool gameOnly)
 // This operation on a 2k floating point cubemap with a full mip chain blows
 // through remaining addressable memory on 32bit.
 #if _64BIT
-            probe->environmentCubeMap()->save(envHDRPath, true, false);
+            //probe->environmentCubeMap()->save(envHDRPath, true, false);
 #endif
-            LOG ("Saving HDR diffuse to " << diffuseHDRPath);
-            probe->diffuseCubeMap()->save(diffuseHDRPath, true, false);
+            //LOG ("Saving HDR diffuse to " << diffuseHDRPath);
+            //probe->diffuseCubeMap()->save(diffuseHDRPath, true, false);
 
             LOG ("Saving HDR specular to " << specularHDRPath);
             probe->specularCubeMap()->save(specularHDRPath, true, false);
